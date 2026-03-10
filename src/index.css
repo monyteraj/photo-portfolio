@@ -13,13 +13,14 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: black;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 30px;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .logo {
@@ -37,19 +38,22 @@ body {
 
 .nav-links button,
 .about-link {
-  background: black;
+  background: transparent;
   color: white;
-  border: 1px solid white;
+  border: 1px solid rgba(255, 255, 255, 0.7);
   padding: 10px 16px;
   cursor: pointer;
   text-decoration: none;
   font-size: 14px;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease,
+    border-color 0.25s ease;
 }
 
 .nav-links button:hover,
 .about-link:hover {
   background: white;
   color: black;
+  transform: translateY(-1px);
 }
 
 .nav-links button.active {
@@ -61,22 +65,34 @@ body {
   column-count: 3;
   column-gap: 12px;
   padding: 40px;
+  transition: opacity 0.2s ease;
+}
+
+.gallery.fade-out {
+  opacity: 0;
+}
+
+.gallery.fade-in {
+  opacity: 1;
 }
 
 .gallery-item {
   break-inside: avoid;
   margin-bottom: 12px;
+  overflow: hidden;
 }
 
 .gallery-image {
   width: 100%;
   display: block;
   cursor: pointer;
-  transition: transform 0.25s ease;
+  transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
 }
 
 .gallery-image:hover {
-  transform: scale(1.02);
+  transform: scale(1.025);
+  opacity: 0.95;
+  filter: brightness(1.05);
 }
 
 .about-section {
@@ -84,18 +100,14 @@ body {
   grid-template-columns: 320px 1fr;
   gap: 40px;
   padding: 60px 40px;
-  border-top: 1px solid white;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   align-items: start;
-}
-
-.about-image-wrap {
-  width: 100%;
 }
 
 .about-image {
   width: 100%;
   display: block;
-  border: 1px solid white;
+  border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 .about-content h2 {
@@ -106,7 +118,7 @@ body {
 
 .about-content p {
   line-height: 1.7;
-  max-width: 700px;
+  max-width: 720px;
 }
 
 .about-links {
@@ -119,21 +131,20 @@ body {
 .about-links a {
   color: white;
   text-decoration: none;
-  border-bottom: 1px solid transparent;
   width: fit-content;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease, opacity 0.25s ease;
 }
 
 .about-links a:hover {
   border-bottom: 1px solid white;
+  opacity: 0.85;
 }
 
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.92);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.94);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -143,8 +154,52 @@ body {
 }
 
 .modal-image {
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 86vw;
+  max-height: 86vh;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+.nav-arrow,
+.close-modal {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.nav-arrow:hover,
+.close-modal:hover {
+  background: white;
+  color: black;
+  transform: scale(1.04);
+}
+
+.nav-arrow {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  padding: 12px 16px;
+}
+
+.nav-arrow:hover {
+  transform: translateY(-50%) scale(1.04);
+}
+
+.left-arrow {
+  left: 24px;
+}
+
+.right-arrow {
+  right: 24px;
+}
+
+.close-modal {
+  top: 24px;
+  right: 24px;
+  font-size: 28px;
+  padding: 8px 14px;
 }
 
 @media (max-width: 1000px) {
@@ -175,5 +230,23 @@ body {
 
   .about-section {
     padding: 40px 20px;
+  }
+
+  .nav-arrow {
+    font-size: 22px;
+    padding: 10px 12px;
+  }
+
+  .left-arrow {
+    left: 10px;
+  }
+
+  .right-arrow {
+    right: 10px;
+  }
+
+  .close-modal {
+    top: 10px;
+    right: 10px;
   }
 }

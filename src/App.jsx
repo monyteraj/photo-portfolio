@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 // BLACK & WHITE IMPORTS
 import bw1 from "./photos/bw/bw1.jpg"
@@ -61,7 +61,7 @@ import color27 from "./photos/color/color27.jpg"
 import color28 from "./photos/color/color28.jpg"
 import color29 from "./photos/color/color29.jpg"
 
-// YOUR PORTRAIT / ABOUT PHOTO
+// ABOUT PHOTO
 import me from "./photos/personal/tony.JPEG"
 
 const photos = [
@@ -127,41 +127,86 @@ const photos = [
 
 function App() {
   const [filter, setFilter] = useState("bw")
-  const [selectedPhoto, setSelectedPhoto] = useState(null)
+  const [selectedIndex, setSelectedIndex] = useState(null)
+  const [isFading, setIsFading] = useState(false)
 
   const filteredPhotos = photos.filter((photo) => photo.type === filter)
+
+  const openPhoto = (index) => {
+    setSelectedIndex(index)
+  }
+
+  const closePhoto = () => {
+    setSelectedIndex(null)
+  }
+
+  const showNext = () => {
+    if (selectedIndex === null) return
+    setSelectedIndex((prev) => (prev + 1) % filteredPhotos.length)
+  }
+
+  const showPrev = () => {
+    if (selectedIndex === null) return
+    setSelectedIndex((prev) => (prev - 1 + filteredPhotos.length) % filteredPhotos.length)
+  }
+
+  const changeFilter = (newFilter) => {
+    if (newFilter === filter) return
+    setIsFading(true)
+    setTimeout(() => {
+      setFilter(newFilter)
+      setIsFading(false)
+      setSelectedIndex(null)
+    }, 180)
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (selectedIndex !== null) {
+        if (e.key === "Escape") closePhoto()
+        if (e.key === "ArrowRight") showNext()
+        if (e.key === "ArrowLeft") showPrev()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [selectedIndex, filteredPhotos.length])
 
   return (
     <div>
       <nav className="navbar">
-        <div className="logo">TONY MERA</div>
+        <div className="logo">MONYTERA</div>
 
         <div className="nav-links">
           <button
             className={filter === "bw" ? "active" : ""}
-            onClick={() => setFilter("bw")}
+            onClick={() => changeFilter("bw")}
           >
             BLACK & WHITE
           </button>
+
           <button
             className={filter === "color" ? "active" : ""}
-            onClick={() => setFilter("color")}
+            onClick={() => changeFilter("color")}
           >
             COLOR
           </button>
+
           <a href="#about" className="about-link">
             ABOUT ME
           </a>
         </div>
       </nav>
 
-      <section className="gallery">
-        {filteredPhotos.map((photo) => (
+      <section className={`gallery ${isFading ? "fade-out" : "fade-in"}`}>
+        {filteredPhotos.map((photo, index) => (
           <div className="gallery-item" key={photo.id}>
             <img
               src={photo.src}
+              loading="lazy"
               className="gallery-image"
-              onClick={() => setSelectedPhoto(photo.src)}
+              onClick={() => openPhoto(index)}
               alt={`${photo.type} photograph ${photo.id}`}
             />
           </div>
@@ -170,57 +215,57 @@ function App() {
 
       <section id="about" className="about-section">
         <div className="about-image-wrap">
-          <img src={me} alt="Antonio Mera portrait" className="about-image" />
+          <img src={me} alt="Portrait of Tony" className="about-image" />
         </div>
 
         <div className="about-content">
           <h2>About Me</h2>
           <p>
-            If you're here that means you've taken an interest in my photos and
-            what I like to shoot. There really isn't a specific style i'm going
-            for when I take photos, nor is there any ulterior motive or thought
-            process. I shoot to document the abundance of love that seems to
-            surround me in life, along with anything I find intertesting. I still
-            consider myself to be a novice at photography, but I am open to shoots
-            with different subjects and also open to becoming a mentee. My 
-            objective is to learn and create as much as I can while I can still 
-            breathe. I hope these photos can reach you in one way or another. 
-
-            <h3>&lt;3 Tony</h3>
+            If you're here that means you've taken an interest in my photos and what I like
+            to shoot. There really isn't a specific style i'm going for when I take photos,
+            nor is there any ulterior motive or thought process. I shoot to document the
+            abundance of love that seems to surround me in life, along with anything I find
+            interesting.
           </p>
           <p>
-            You can also mention your location, whether you shoot film or digital,
-            and what kinds of projects or collaborations you are open to.
+            I still consider myself to be a novice at photography, but I am open to shoots
+            with different subjects and also open to becoming a mentee. My objective is to
+            learn and create as much as I can while I can still breathe.
           </p>
+          <h3>&lt;3 Tony</h3>
 
           <div className="about-links">
             <a href="mailto:mony.tera.j@gmail.com">mony.tera.j@gmail.com</a>
-            <a
-              href="https://www.instagram.com/mony.tera/"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://instagram.com/yourhandle" target="_blank" rel="noreferrer">
               Instagram
             </a>
-            <a
-              href="https://www.tiktok.com/@toastyjm?lang=en"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://tiktok.com/@yourhandle" target="_blank" rel="noreferrer">
               TikTok
             </a>
           </div>
         </div>
       </section>
 
-      {selectedPhoto && (
-        <div className="modal" onClick={() => setSelectedPhoto(null)}>
+      {selectedIndex !== null && (
+        <div className="modal" onClick={closePhoto}>
+          <button className="nav-arrow left-arrow" onClick={(e) => { e.stopPropagation(); showPrev() }}>
+            ←
+          </button>
+
           <img
-            src={selectedPhoto}
+            src={filteredPhotos[selectedIndex].src}
             className="modal-image"
             alt="Selected photograph"
             onClick={(e) => e.stopPropagation()}
           />
+
+          <button className="nav-arrow right-arrow" onClick={(e) => { e.stopPropagation(); showNext() }}>
+            →
+          </button>
+
+          <button className="close-modal" onClick={(e) => { e.stopPropagation(); closePhoto() }}>
+            ×
+          </button>
         </div>
       )}
     </div>
