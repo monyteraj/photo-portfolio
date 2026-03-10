@@ -204,9 +204,10 @@ function App() {
           <div className="gallery-item" key={photo.id}>
             <img
               src={photo.src}
-              loading="lazy"
-              className="gallery-image"
+               loading="lazy"
+              className="gallery-image loading"
               onClick={() => openPhoto(index)}
+              onLoad={(e) => e.currentTarget.classList.remove("loading")}
               alt={`${photo.type} photograph ${photo.id}`}
             />
           </div>
