@@ -103,7 +103,13 @@ body {
 
 .gallery-image.loading {
   opacity: 0;
-  filter: blur(6px);
+  filter: blur(20px);
+  transform: scale(1.03);
+}
+
+.gallery-image:not(.loading) {
+  filter: blur(0);
+  opacity: 1;
 }
 
 .gallery-image:hover {
@@ -218,6 +224,30 @@ body {
   padding: 8px 14px;
 }
 
+.back-to-top {
+  position: fixed;
+  bottom: 35px;
+  right: 35px;
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3000;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.back-to-top:hover {
+  background: white;
+  color: black;
+  transform: scale(1.1);
+}
+
 @media (max-width: 1000px) {
   .gallery {
     column-count: 2;
@@ -267,36 +297,10 @@ body {
   }
 
   .back-to-top {
-  position: fixed;
-  bottom: 35px;
-  right: 35px;
-  width: 48px;
-  height: 48px;
-  background: rgba(0, 0, 0, 0.75);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 3000;
-  transition: background 0.25s ease, transform 0.2s ease;
-}
-
-  .back-to-top:hover {
-  background: white;
-  color: black;
-  transform: scale(1.1);
-}
-
-  @media (max-width: 600px) {
-  .back-to-top {
     bottom: 20px;
     right: 20px;
     width: 44px;
     height: 44px;
     font-size: 22px;
   }
-}
 }
