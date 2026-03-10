@@ -62,7 +62,7 @@ import color28 from "./photos/color/color28.jpg"
 import color29 from "./photos/color/color29.jpg"
 
 // YOUR PORTRAIT / ABOUT PHOTO
-import me from "./photos/personal/antonio.JPEG"
+import me from "./photos/personal/tony.JPEG"
 
 const photos = [
   { id: 1, src: bw1, type: "bw" },
