@@ -251,14 +251,14 @@ function App() {
           <div className="about-links">
             <a href="mailto:mony.tera.j@gmail.com">mony.tera.j@gmail.com</a>
             <a
-              href="https://instagram.com/yourhandle"
+              href="https://www.instagram.com/mony.tera/"
               target="_blank"
               rel="noreferrer"
             >
               Instagram
             </a>
             <a
-              href="https://tiktok.com/@yourhandle"
+              href="https://www.tiktok.com/@toastyjm"
               target="_blank"
               rel="noreferrer"
             >
