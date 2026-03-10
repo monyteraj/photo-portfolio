@@ -129,6 +129,7 @@ function App() {
   const [filter, setFilter] = useState("bw")
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [isFading, setIsFading] = useState(false)
+  const [showTop, setShowTop] = useState(false)
 
   const filteredPhotos = photos.filter((photo) => photo.type === filter)
 
@@ -147,7 +148,9 @@ function App() {
 
   const showPrev = () => {
     if (selectedIndex === null) return
-    setSelectedIndex((prev) => (prev - 1 + filteredPhotos.length) % filteredPhotos.length)
+    setSelectedIndex(
+      (prev) => (prev - 1 + filteredPhotos.length) % filteredPhotos.length
+    )
   }
 
   const changeFilter = (newFilter) => {
@@ -172,6 +175,15 @@ function App() {
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [selectedIndex, filteredPhotos.length])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowTop(window.scrollY > 500)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   return (
     <div>
@@ -204,7 +216,7 @@ function App() {
           <div className="gallery-item" key={photo.id}>
             <img
               src={photo.src}
-               loading="lazy"
+              loading="lazy"
               className="gallery-image loading"
               onClick={() => openPhoto(index)}
               onLoad={(e) => e.currentTarget.classList.remove("loading")}
@@ -222,25 +234,34 @@ function App() {
         <div className="about-content">
           <h2>About Me</h2>
           <p>
-            If you're here that means you've taken an interest in my photos and what I like
-            to shoot. There really isn't a specific style i'm going for when I take photos,
-            nor is there any ulterior motive or thought process. I shoot to document the
-            abundance of love that seems to surround me in life, along with anything I find
-            interesting.
+            If you're here that means you've taken an interest in my photos and
+            what I like to shoot. There really isn't a specific style i'm going
+            for when I take photos, nor is there any ulterior motive or thought
+            process. I shoot to document the abundance of love that seems to
+            surround me in life, along with anything I find interesting.
           </p>
           <p>
-            I still consider myself to be a novice at photography, but I am open to shoots
-            with different subjects and also open to becoming a mentee. My objective is to
-            learn and create as much as I can while I can still breathe.
+            I still consider myself to be a novice at photography, but I am
+            open to shoots with different subjects and also open to becoming a
+            mentee. My objective is to learn and create as much as I can while I
+            can still breathe.
           </p>
           <h3>&lt;3 Tony</h3>
 
           <div className="about-links">
             <a href="mailto:mony.tera.j@gmail.com">mony.tera.j@gmail.com</a>
-            <a href="https://instagram.com/yourhandle" target="_blank" rel="noreferrer">
+            <a
+              href="https://instagram.com/yourhandle"
+              target="_blank"
+              rel="noreferrer"
+            >
               Instagram
             </a>
-            <a href="https://tiktok.com/@yourhandle" target="_blank" rel="noreferrer">
+            <a
+              href="https://tiktok.com/@yourhandle"
+              target="_blank"
+              rel="noreferrer"
+            >
               TikTok
             </a>
           </div>
@@ -249,7 +270,13 @@ function App() {
 
       {selectedIndex !== null && (
         <div className="modal" onClick={closePhoto}>
-          <button className="nav-arrow left-arrow" onClick={(e) => { e.stopPropagation(); showPrev() }}>
+          <button
+            className="nav-arrow left-arrow"
+            onClick={(e) => {
+              e.stopPropagation()
+              showPrev()
+            }}
+          >
             ←
           </button>
 
@@ -260,14 +287,36 @@ function App() {
             onClick={(e) => e.stopPropagation()}
           />
 
-          <button className="nav-arrow right-arrow" onClick={(e) => { e.stopPropagation(); showNext() }}>
+          <button
+            className="nav-arrow right-arrow"
+            onClick={(e) => {
+              e.stopPropagation()
+              showNext()
+            }}
+          >
             →
           </button>
 
-          <button className="close-modal" onClick={(e) => { e.stopPropagation(); closePhoto() }}>
+          <button
+            className="close-modal"
+            onClick={(e) => {
+              e.stopPropagation()
+              closePhoto()
+            }}
+          >
             ×
           </button>
         </div>
+      )}
+
+      {showTop && (
+        <button
+          className="back-to-top"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Back to top"
+        >
+          ↑
+        </button>
       )}
     </div>
   )
